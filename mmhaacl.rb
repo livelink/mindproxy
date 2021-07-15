@@ -7,10 +7,12 @@ subdivision = ["Crimea"]
 geoname_ids = []
 ip_blocks = []
 
-CSV.foreach(('/Users/adamcathersides/Downloads/GeoLite2-City-CSV_20210713/GeoLite2-City-Locations-en.csv'), headers: false, col_sep:",") do |row|
-  if country_iso.include? row[4] or country_name.include? row[5] or subdivision.include? row[7]
-    puts "#{row[0]} - #{row[5]} - #{row[7]}"
-    geoname_ids.push(row[0])
+def filter_cities
+  CSV.foreach(('/Users/adamcathersides/Downloads/GeoLite2-City-CSV_20210713/GeoLite2-City-Locations-en.csv'), headers: false, col_sep:",") do |row|
+    if country_iso.include? row[4] or country_name.include? row[5] or subdivision.include? row[7]
+      puts "#{row[0]} - #{row[5]} - #{row[7]}"
+      geoname_ids.push(row[0])
+    end
   end
 end
 
