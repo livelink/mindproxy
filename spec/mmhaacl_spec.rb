@@ -1,9 +1,6 @@
 require 'mmhaacl'
 
 describe ConfigGen do
-  # country_iso = ['CY']
-  # country_name = []
-  # subdivision = []
 
   options = {countryiso: ['CY'], countryname: [], subdivision: [],
              citycsv: './spec/city_test_data.csv', ipblockscsv: '',
@@ -24,9 +21,6 @@ describe ConfigGen do
 end
 
 describe ConfigGen do
-  # country_iso = []
-  # country_name = ['Cyprus']
-  # subdivision = []
 
   options = {countryiso: [], countryname: ['Cyprus'], subdivision: [],
              citycsv: './spec/city_test_data.csv', ipblockscsv: '',
@@ -46,9 +40,6 @@ describe ConfigGen do
 end
 
 describe ConfigGen do
-  # country_iso = []
-  # country_name = []
-  # subdivision = ['Ammochostos']
 
   options = {countryiso: [], countryname: ['Cyprus'], subdivision: [],
              citycsv: './spec/city_test_data.csv', ipblockscsv: '',
