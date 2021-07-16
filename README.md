@@ -27,8 +27,11 @@ usage: ./maxmind-haproxy-acl.rb [options]
 
 ```
 
-Country name **or** country ISO code **or** country subdivision can be specified.  The string must
-match what is in the csv file.
+
+Any of country name, country iso and country subdivision will be combined 
+as a logical OR to filter the results found in the CSV file specified by -f. 
+The string must exactly match the respective entry in the CSV
+
 
 The haproxy acl name can be overridden if required, it defaults to
 `is_sanctioned_ip`.
