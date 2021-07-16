@@ -27,7 +27,7 @@ usage: ./maxmind-haproxy-acl.rb [options]
 
 ```
 
-Either country name *or* country ISO code *or* country subdivision can be specified.  The string must
+Either country name **or** country ISO code **or** country subdivision can be specified.  The string must
 match what is in the csv file.
 
 The haproxy acl name can be overridden if required, it defaults to
