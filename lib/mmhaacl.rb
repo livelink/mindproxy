@@ -18,19 +18,28 @@ class ConfigGen
   end
 
   def get_geoname_ids()
-    CSV.foreach(@citycsv, headers: false, col_sep: ",") do |row|
-      if @countryiso.include?(row[4]) || @countryname.include?(row[5]) || @subdivision.include?(row[7])
-        @geoname_ids.push(row[0])
+    begin
+      CSV.foreach(@citycsv, headers: false, col_sep: ",") do |row|
+        if @countryiso.include?(row[4]) || @countryname.include?(row[5]) || @subdivision.include?(row[7])
+          @geoname_ids.push(row[0])
+        end
       end
+    rescue SystemCallError => e
+      puts "Error opening file #{@citycsv}: #{e}"
+      exit
     end
-    @geoname_ids
   end
 
   def get_ip_blocks()
-    CSV.foreach(@ipblockscsv, headers: false, col_sep: ",") do |row|
-      if @geoname_ids.include?(row[1])
-        @ip_blocks.push(row[0])
+    begin
+      CSV.foreach(@ipblockscsv, headers: false, col_sep: ",") do |row|
+        if @geoname_ids.include?(row[1])
+          @ip_blocks.push(row[0])
+        end
       end
+    rescue SystemCallError => e
+      puts "Error opening file #{@ipblockscsv}: #{e}"
+      exit
     end
   end
 
@@ -39,10 +48,15 @@ class ConfigGen
     get_geoname_ids()
     get_ip_blocks()
     puts 'Writing haproxy acl file..'
-    File.open(@outputfile, 'w') do |f|
-      @ip_blocks.each do |block|
-        f.write("acl #{@acl_name} src #{block}\n")
+    begin
+      File.open(@outputfile, 'w') do |f|
+        @ip_blocks.each do |block|
+          f.write("acl #{@acl_name} src #{block}\n")
+        end
       end
+    rescue SystemCallError => e
+      puts "Error writing file #{@outputfile}: #{e}"
+      exit
     end
   end
 end

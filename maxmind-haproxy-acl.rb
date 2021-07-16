@@ -19,5 +19,5 @@ end
 
 options = opts.to_hash
 
-config = ConfigGen.new(**options)
-config.write_config()
+generator = ConfigGen.new(**options)
+generator.write_config()
