@@ -1,11 +1,14 @@
 require 'csv'
+require 'zip'
+require 'httparty'
+require 'date'
 
 class ConfigGen
 
   attr_reader :geoname_ids, :ip_blocks
 
   def initialize(countryiso:, countryname:, subdivision:, ipblockscsv:,
-                 citycsv:, outputfile:, aclname:)
+                 citycsv:, outputfile:, aclname:, license:, download_dir:)
     @countryiso = countryiso
     @countryname = countryname
     @subdivision = subdivision
@@ -15,6 +18,9 @@ class ConfigGen
     @ip_blocks = []
     @outputfile = outputfile
     @acl_name = aclname
+    @license = license
+    @uri = "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&suffix=zip&license_key=#{@license}"
+    @download_dir = download_dir
   end
 
   def get_geoname_ids()
@@ -59,4 +65,34 @@ class ConfigGen
       exit
     end
   end
+
+  def check_latest_db()
+    begin
+      headers = HTTParty.head(@uri)
+    rescue HTTParty::Error => e
+      puts "Error retrieving headers: #{e}"
+    end
+
+    begin
+      DateTime.parse(headers['last-modified'])
+    rescue DateTime::Error => e
+      puts "Could not parse date string"
+    end
+  end
+
+  def check_stored_db()
+    begin
+      DateTime.parse(File.mtime("#{@download_dir}/GeoLite2-City-Locations-en.csv").to_s)
+    rescue Errno::ENOENT => e
+      puts "File or directory #{@download_dir}/GeoLite2-City-Locations-en.csv doesn't exist."
+      nil
+    rescue Errno::EACCES => e
+      puts "Can't read from #{@download_dir}/GeoLite2-City-Locations-en.csv. No permission."
+      exit 1
+    end
+  end
+
+  def download_csv_db()
+  end
 end
+
