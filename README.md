@@ -1,4 +1,4 @@
-# maxmind-haproxy-acl
+# mindproxy
 
 A ruby script that parses the maxmind csv database files to produce a haproxy
 compatible acl config file.
@@ -7,15 +7,15 @@ compatible acl config file.
 
 Dependencies are specified in the Gemfile provided.
 ```
-cd maxmind-haproxy-acl
+cd mindproxy
 bundle install
 ```
 
 ## Usage
 
 ```
-./maxmind-haproxy-acl.rb -h
-usage: ./maxmind-haproxy-acl.rb [options]
+./mindproxy.rb -h
+usage: ./mindproxy.rb [options]
     -c, --citycsv      The maxmind city database csv
     -i, --ipblockscsv  The maxmind ip blocks database csv
     -a, --countryiso   The optional country code (ISO).
@@ -44,7 +44,7 @@ Grab them from [maxmind.com](https://www.maxmind.com/)
 
 ```
 #Filter North Korea(KP), Cuba, and Crimea
-./maxmind-haproxy-acl.rb -c /tmp/GeoLite2-City-CSV_20210713/GeoLite2-City-Locations-en.csv -i /tmp/GeoLite2-City-CSV_20210713/GeoLite2-City-Blocks-IPv4
+./mindproxy.rb -c /tmp/GeoLite2-City-CSV_20210713/GeoLite2-City-Locations-en.csv -i /tmp/GeoLite2-City-CSV_20210713/GeoLite2-City-Blocks-IPv4
 .csv -a KP -n Cuba -s Crimea -o test.conf
 
 head test.conf
@@ -67,7 +67,7 @@ acl is_sanctioned_ip src 31.40.128.70/32
 To run the test suite.
 
 ```
-cd maxmind-haproxy-acl
+cd mindproxy
 rpsec
 ```
 
