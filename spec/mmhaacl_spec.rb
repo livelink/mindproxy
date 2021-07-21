@@ -1,5 +1,6 @@
 require 'mmhaacl'
 require 'webmock/rspec'
+require 'date'
 
 describe ConfigGen do
   options = {countryiso: ['CY'], countryname: [], subdivision: [],
@@ -62,6 +63,22 @@ end
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
              citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
+             license: '', license: '', download_dir: ''}
+  before(:each) do
+    @gen = ConfigGen.new(options)
+  end
+  describe ".get_filename" do
+    it "returns filename as specified in header" do
+      stub_request(:head, "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&suffix=zip&license_key=").
+        to_return(status: 200, body:"", headers: {'content-disposition': 'attachment; filename=GeoLite2-City-CSV_20210720.zip'})
+      expect(@gen.get_filename).to eq('GeoLite2-City-CSV_20210720.zip')
+    end
+  end
+end
+
+describe ConfigGen do
+  options = {countryiso: [], countryname: [], subdivision: [],
+             citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
              license: '', download_dir: 'spec'}
   before(:each) do
     @gen = ConfigGen.new(options)
@@ -88,3 +105,34 @@ describe ConfigGen do
     end
   end
 end
+
+describe ConfigGen do
+  options = {countryiso: [], countryname: [], subdivision: [],
+             citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
+             license: '', download_dir: ''}
+  before(:each) do
+    @gen = ConfigGen.new(options)
+  end
+  describe ".update_required?" do
+    context "when dates match" do
+      it "return false" do
+      stub_request(:head, "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&suffix=zip&license_key=").
+        to_return(status: 200, body:"", headers: { 'last-modified':'Tue, 13 Jul 2021 02:33:26 GMT' })
+
+      allow(@gen).to receive(:check_stored_db).and_return(DateTime.parse('Tue, 13 Jul 2021 02:33:26 GMT'))
+      expect(@gen.update_required?).to equal(false)
+      end
+    end
+    context "when dates do not match" do
+      it "return true" do
+      stub_request(:head, "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&suffix=zip&license_key=").
+        to_return(status: 200, body:"", headers: { 'last-modified':'Tue, 13 Jul 2021 02:33:26 GMT' })
+
+      allow(@gen).to receive(:check_stored_db).and_return(DateTime.parse('Tue, 14 Jul 2021 02:33:26 GMT'))
+      expect(@gen.update_required?).to equal(true)
+      end
+    end
+  end
+end
+
+
