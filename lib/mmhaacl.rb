@@ -116,8 +116,10 @@ class ConfigGen
     destination = "#{@download_dir}/maxmind_db"
     begin
       FileUtils.mkdir_p(destination)
-      Tempfile.create(['mm_db'], binmode: true) do |tempfile|
-        tempfile.write(HTTParty.get(@uri).body)
+      Tempfile.create(['mm_db']) do |tempfile|
+        body = HTTParty.get(@uri).body
+        tempfile.write(body)
+        tempfile.close
         Zip::File.open(tempfile.path) do |zip_file|
           # Overwrite existing files
           Zip.on_exists_proc = true
@@ -132,7 +134,7 @@ class ConfigGen
       exit 1
     rescue Zip::Error => e
       puts "Cannot read maxmind zip file: #{e}"
-    rescue Tempfile::Error => e
+    rescue Tempfile::Errno => e
       puts "Error creating tempfile: #{e}"
       exit 1
     end

@@ -1,11 +1,12 @@
 require 'mmhaacl'
 require 'webmock/rspec'
 require 'date'
+require 'zip'
 
 describe ConfigGen do
   options = {countryiso: ['CY'], countryname: [], subdivision: [],
              citycsv: './spec/GeoLite2-City-Locations-en.csv', ipblockscsv: '',
-             aclname: '', outputfile: '', license: '', download_dir: ''}
+             aclname: '', outputfile: '', license: '', dir: ''}
 
   before(:each) do
     @gen = ConfigGen.new(options)
@@ -24,7 +25,7 @@ end
 describe ConfigGen do
   options = {countryiso: [], countryname: ['Cyprus'], subdivision: [],
              citycsv: './spec//GeoLite2-City-Locations-en.csv', ipblockscsv: './spec/GeoLite2-City-Blocks-IPv4.csv',
-             aclname: '', outputfile: '', license: '', download_dir: ''}
+             aclname: '', outputfile: '', license: '', dir: ''}
   before(:context) do
     @gen = ConfigGen.new(options)
   end
@@ -47,7 +48,7 @@ end
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
              citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
-             license: '', license: '', download_dir: ''}
+             license: '', license: '', dir: ''}
   before(:each) do
     @gen = ConfigGen.new(options)
   end
@@ -63,7 +64,7 @@ end
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
              citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
-             license: '', license: '', download_dir: ''}
+             license: '', license: '', dir: ''}
   before(:each) do
     @gen = ConfigGen.new(options)
   end
@@ -79,7 +80,7 @@ end
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
              citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
-             license: '', download_dir: 'spec'}
+             license: '', dir: 'spec'}
   before(:each) do
     @gen = ConfigGen.new(options)
   end
@@ -93,7 +94,7 @@ end
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
              citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
-             license: '', download_dir: 'does_not_exist'}
+             license: '', dir: 'does_not_exist'}
   before(:each) do
     @gen = ConfigGen.new(options)
   end
@@ -109,14 +110,14 @@ end
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
              citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
-             license: '', download_dir: ''}
+             license: '', dir: ''}
   before(:each) do
     @gen = ConfigGen.new(options)
   end
   describe ".update_required?" do
     context "when dates match" do
       it "return false" do
-      stub_request(:head, "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&suffix=zip&license_key=").
+        stub_request(:head, "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&suffix=zip&license_key=").
         to_return(status: 200, body:"", headers: { 'last-modified':'Tue, 13 Jul 2021 02:33:26 GMT' })
 
       allow(@gen).to receive(:check_stored_db).and_return(DateTime.parse('Tue, 13 Jul 2021 02:33:26 GMT'))
@@ -125,7 +126,7 @@ describe ConfigGen do
     end
     context "when dates do not match" do
       it "return true" do
-      stub_request(:head, "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&suffix=zip&license_key=").
+        stub_request(:head, "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&suffix=zip&license_key=").
         to_return(status: 200, body:"", headers: { 'last-modified':'Tue, 13 Jul 2021 02:33:26 GMT' })
 
       allow(@gen).to receive(:check_stored_db).and_return(DateTime.parse('Tue, 14 Jul 2021 02:33:26 GMT'))
@@ -136,3 +137,25 @@ describe ConfigGen do
 end
 
 
+describe ConfigGen do
+  options = {countryiso: [], countryname: [], subdivision: [],
+             citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
+             license: '', dir: 'does_not_exist'}
+  before(:each) do
+    @gen = ConfigGen.new(**options)
+  end
+  after(:each) do
+    FileUtils.rm_rf(options[:dir])
+  end
+  zip = File.open('spec/test.zip', 'rb')
+  zip_data = zip.read
+  zip.close
+  describe ".grab_extract_db" do
+    it "is an instance of Zip" do
+      stub_request(:get, "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&suffix=zip&license_key=").
+        to_return(status: 200, body: zip_data, headers: {'content-type': 'application/zip'})
+      @gen.grab_extract_db()
+      expect(Dir.entries("#{options[:dir]}/maxmind_db")).to include('GeoLite2-City-Blocks-IPv4.csv')
+    end
+  end
+end
