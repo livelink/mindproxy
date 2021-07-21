@@ -32,7 +32,7 @@ class ConfigGen
       end
     rescue SystemCallError => e
       puts "Error opening file #{@citycsv}: #{e}"
-      exit
+      exit 1
     end
   end
 
@@ -45,7 +45,7 @@ class ConfigGen
       end
     rescue SystemCallError => e
       puts "Error opening file #{@ipblockscsv}: #{e}"
-      exit
+      exit 1
     end
   end
 
@@ -62,7 +62,7 @@ class ConfigGen
       end
     rescue SystemCallError => e
       puts "Error writing file #{@outputfile}: #{e}"
-      exit
+      exit 1
     end
   end
 
