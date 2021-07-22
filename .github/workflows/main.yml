@@ -21,7 +21,7 @@ jobs:
       - name: Run rspec
         run: |
           sudo gem install bundler
-          bundle install
+          bundle installl
           rspec
   build_image:
     needs: rspec_tests
