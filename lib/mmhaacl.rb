@@ -119,19 +119,17 @@ class ConfigGen
   end
 
   def grab_extract_db
-    destination = "#{@download_dir}"
     begin
-      FileUtils.mkdir_p(destination)
+      FileUtils.mkdir_p(@download_dir)
       Tempfile.create(['mm_db']) do |tempfile|
         body = HTTParty.get(@uri).body
         tempfile.write(body)
         tempfile.close
         Zip::File.open(tempfile.path, restore_times: true) do |zip_file|
           # Overwrite existing files
-          zip_file.restore_times = true
           Zip.on_exists_proc = true
           zip_file.glob('**/*.csv') do |csv|
-              fpath = File.join(destination, "#{csv}".partition('/').last)
+              fpath = File.join(@download_dir, "#{csv}".partition('/').last)
               zip_file.extract(csv, fpath)
           end
         end

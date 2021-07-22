@@ -139,7 +139,7 @@ end
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
              citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
-             license: '', dir: 'extract_test'}
+             license: '', dir: 'extract_test/maxmind_db'}
   before(:each) do
     @gen = ConfigGen.new(**options)
   end
@@ -153,8 +153,8 @@ describe ConfigGen do
     it 'extracts csv files from zip' do
       stub_request(:get, "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&suffix=zip&license_key=").
         to_return(status: 200, body: zip_data, headers: {'content-type': 'application/zip'})
-      @gen.grab_extract_db()
-      expect(Dir.entries("#{options[:dir]}/maxmind_db")).to include('GeoLite2-City-Blocks-IPv4.csv')
+      @gen.grab_extract_db
+      expect(Dir.entries("#{options[:dir]}")).to include('GeoLite2-City-Blocks-IPv4.csv')
     end
   end
 end
