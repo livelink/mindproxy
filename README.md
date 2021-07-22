@@ -1,3 +1,4 @@
+![Build Status](https://github.com/livelink/mindproxy/actions/workflows/main.yml/badge.svg)
 # mindproxy
 
 A ruby script that parses the maxmind csv database files to produce a haproxy

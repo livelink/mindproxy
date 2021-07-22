@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  rspec_tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,7 +24,7 @@ jobs:
           bundle install
           rspec
   build_image:
-    needs: test
+    needs: rspec_tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
