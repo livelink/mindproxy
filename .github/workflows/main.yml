@@ -24,6 +24,7 @@ jobs:
           bundle install
           rspec
   build_image:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
