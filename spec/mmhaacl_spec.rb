@@ -1,7 +1,6 @@
 require 'mmhaacl'
 require 'webmock/rspec'
 require 'date'
-require 'zip'
 
 describe ConfigGen do
   options = {countryiso: ['CY'], countryname: [], subdivision: [],
