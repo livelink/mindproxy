@@ -52,9 +52,9 @@ class ConfigGen
 
   def write_config
     puts 'Analysing maxmind database csv files'
-    get_geoname_ids()
-    get_ip_blocks()
-    puts 'Writing haproxy acl file..'
+    get_geoname_ids
+    get_ip_blocks
+    puts "Writing haproxy acl file to #{@outputfile}"
     begin
       File.open(@outputfile, 'w') do |f|
         @ip_blocks.each do |block|
@@ -103,8 +103,14 @@ class ConfigGen
   end
 
   def update_required?
-    stored_db_date = check_stored_db.to_date().to_s
+    begin
+      stored_db_date = check_stored_db.to_date().to_s
+    rescue NoMethodError => e
+      stored_db_date = nil
+    end
     latest_db_date = check_latest_db.to_date().to_s
+    puts "Stored database date: #{stored_db_date}"
+    puts "Latest database date: #{latest_db_date}"
     if stored_db_date.eql? latest_db_date
       false
     else
@@ -113,15 +119,16 @@ class ConfigGen
   end
 
   def grab_extract_db
-    destination = "#{@download_dir}/maxmind_db"
+    destination = "#{@download_dir}"
     begin
       FileUtils.mkdir_p(destination)
       Tempfile.create(['mm_db']) do |tempfile|
         body = HTTParty.get(@uri).body
         tempfile.write(body)
         tempfile.close
-        Zip::File.open(tempfile.path) do |zip_file|
+        Zip::File.open(tempfile.path, restore_times: true) do |zip_file|
           # Overwrite existing files
+          zip_file.restore_times = true
           Zip.on_exists_proc = true
           zip_file.glob('**/*.csv') do |csv|
               fpath = File.join(destination, "#{csv}".partition('/').last)
