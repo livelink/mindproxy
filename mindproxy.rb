@@ -31,11 +31,22 @@ end
 
 options = opts.to_hash
 
-generator = ConfigGen.new(**options)
-if generator.update_required?
-  puts "Database out of date or non existent. Will download update.."
-  generator.grab_extract_db
-else
-  puts "Database is up to date.  Skipping download"
+if options[:countryname].empty? && options[:countryiso].empty? && options[:subdivision].empty?
+  puts 'You need to specify at least a countryname, countryiso or subdivision'
+  exit 1
 end
-generator.write_config
+generator = ConfigGen.new(**options)
+
+# If maxmind license key is supplied check for any updates first. Otherwise use
+# the files are are supplied.
+if options[:license]
+  if generator.update_required?
+    puts "Database out of date or non existent. Will download update.."
+    generator.grab_extract_db
+  else
+    puts "Database is up to date.  Skipping download"
+  end
+  generator.write_config
+else
+  generator.write_config
+end
