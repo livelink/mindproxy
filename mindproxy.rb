@@ -26,7 +26,7 @@ end
 
 if ARGV.length == 0
   puts opts
-  exit 1
+  exit 0
 end
 
 options = opts.to_hash
