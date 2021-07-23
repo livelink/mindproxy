@@ -143,7 +143,7 @@ describe ConfigGen do
     @gen = ConfigGen.new(**options)
   end
   after(:each) do
-    FileUtils.rm_rf(options[:dir])
+    FileUtils.rm_rf('extract_test')
   end
   zip = File.open('spec/test.zip', 'rb')
   zip_data = zip.read
