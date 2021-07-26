@@ -20,14 +20,17 @@ class ConfigGen
     @outputfile = outputfile
     @acl_name = aclname
     @license = license
-    @uri = "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&suffix=zip&license_key=#{@license}"
+    @uri = 'https://download.maxmind.com/app/geoip_download?' \
+    "edition_id=GeoLite2-City-CSV&suffix=zip&license_key=#{@license}"
     @download_dir = dir
   end
 
   def get_geoname_ids
     begin
       CSV.foreach(@citycsv, headers: false, col_sep: ",") do |row|
-        if @countryiso.include?(row[4]) || @countryname.include?(row[5]) || @subdivision.include?(row[7])
+        if @countryiso.include?(row[4])  ||
+           @countryname.include?(row[5]) ||
+           @subdivision.include?(row[7])
           @geoname_ids.push(row[0])
         end
       end
@@ -125,8 +128,9 @@ class ConfigGen
         body = HTTParty.get(@uri).body
         tempfile.write(body)
         tempfile.close
-        Zip::File.open(tempfile.path, restore_times: true) do |zip_file|
+        Zip::File.open(tempfile.path) do |zip_file|
           # Overwrite existing files
+          zip_file.restore_times = true
           Zip.on_exists_proc = true
           zip_file.glob('**/*.csv') do |csv|
               fpath = File.join(@download_dir, "#{csv}".partition('/').last)

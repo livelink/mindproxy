@@ -41,10 +41,10 @@ generator = ConfigGen.new(**options)
 # the files are are supplied.
 if options[:license]
   if generator.update_required?
-    puts "Database out of date or non existent. Will download update.."
+    puts 'MaxMind database out of date or non existent. Downloading...'
     generator.grab_extract_db
   else
-    puts "Database is up to date.  Skipping download"
+    puts 'MaxMind database is up to date! Skipping download.'
   end
   generator.write_config
 else
