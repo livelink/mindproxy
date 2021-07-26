@@ -9,7 +9,7 @@ class ConfigGen
   attr_reader :geoname_ids, :ip_blocks
 
   def initialize(countryiso:, countryname:, subdivision:, ipblockscsv:,
-                 citycsv:, outputfile:, aclname:, license:, dir:)
+                 citycsv:, outputfile:, license:, dir:)
     @countryiso = countryiso
     @countryname = countryname
     @subdivision = subdivision
@@ -18,7 +18,6 @@ class ConfigGen
     @geoname_ids = []
     @ip_blocks = []
     @outputfile = outputfile
-    @acl_name = aclname
     @license = license
     @uri = 'https://download.maxmind.com/app/geoip_download?' \
     "edition_id=GeoLite2-City-CSV&suffix=zip&license_key=#{@license}"
@@ -61,7 +60,7 @@ class ConfigGen
     begin
       File.open(@outputfile, 'w') do |f|
         @ip_blocks.each do |block|
-          f.write("acl #{@acl_name} src #{block}\n")
+          f.write("#{block}\n")
         end
       end
     rescue SystemCallError => e

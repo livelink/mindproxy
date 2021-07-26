@@ -5,7 +5,7 @@ require 'date'
 describe ConfigGen do
   options = {countryiso: ['CY'], countryname: [], subdivision: [],
              citycsv: './spec/GeoLite2-City-Locations-en.csv', ipblockscsv: '',
-             aclname: '', outputfile: '', license: '', dir: ''}
+              outputfile: '', license: '', dir: ''}
 
   before(:each) do
     @gen = ConfigGen.new(**options)
@@ -24,7 +24,7 @@ end
 describe ConfigGen do
   options = { countryiso: [], countryname: ['Cyprus'], subdivision: [],
              citycsv: './spec//GeoLite2-City-Locations-en.csv', ipblockscsv: './spec/GeoLite2-City-Blocks-IPv4.csv',
-             aclname: '', outputfile: '', license: '', dir: '' }
+              outputfile: '', license: '', dir: '' }
   before(:context) do
     @gen = ConfigGen.new(**options)
   end
@@ -46,7 +46,7 @@ end
 
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
-             citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
+             citycsv: '', ipblockscsv: '',  outputfile: '',
              license: '', dir: ''}
   before(:each) do
     @gen = ConfigGen.new(**options)
@@ -62,7 +62,7 @@ end
 
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
-             citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
+             citycsv: '', ipblockscsv: '',  outputfile: '',
              license: '', dir: ''}
   before(:each) do
     @gen = ConfigGen.new(**options)
@@ -78,7 +78,7 @@ end
 
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
-             citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
+             citycsv: '', ipblockscsv: '',  outputfile: '',
              license: '', dir: 'spec'}
   before(:each) do
     @gen = ConfigGen.new(**options)
@@ -92,7 +92,7 @@ end
 
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
-             citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
+             citycsv: '', ipblockscsv: '',  outputfile: '',
              license: '', dir: 'does_not_exist'}
   before(:each) do
     @gen = ConfigGen.new(**options)
@@ -108,7 +108,7 @@ end
 
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
-             citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
+             citycsv: '', ipblockscsv: '',  outputfile: '',
              license: '', dir: ''}
   before(:each) do
     @gen = ConfigGen.new(**options)
@@ -137,13 +137,13 @@ end
 
 describe ConfigGen do
   options = {countryiso: [], countryname: [], subdivision: [],
-             citycsv: '', ipblockscsv: '', aclname: '', outputfile: '',
+             citycsv: '', ipblockscsv: '',  outputfile: '',
              license: '', dir: 'extract_test/maxmind_db'}
   before(:each) do
     @gen = ConfigGen.new(**options)
   end
   after(:each) do
-    FileUtils.rm_rf('extract_test')
+    FileUtils.rm_rf(options[:dir])
   end
   zip = File.open('spec/test.zip', 'rb')
   zip_data = zip.read
