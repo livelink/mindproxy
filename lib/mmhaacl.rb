@@ -58,6 +58,7 @@ class ConfigGen
     get_ip_blocks
     puts "Writing haproxy acl file to #{@outputfile}"
     begin
+      FileUtils.mkdir_p(File.dirname(@outputfile))
       File.open(@outputfile, 'w') do |f|
         @ip_blocks.each do |block|
           f.write("#{block}\n")
