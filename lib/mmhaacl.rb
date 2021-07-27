@@ -80,7 +80,8 @@ class ConfigGen
     begin
       DateTime.parse(headers['last-modified'])
     rescue DateTime::Error, TypeError => e
-      puts 'Could not parse date string. Probably an error downloading the maxmind db.' \
+      puts 'Could not parse last-modified date from the headers.' \
+        '\nProbably an error downloading the maxmind db.' \
         "\nHeaders: #{headers}"
       exit 1
     end
