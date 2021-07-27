@@ -74,12 +74,15 @@ class ConfigGen
       headers = HTTParty.head(@uri)
     rescue HTTParty::Error => e
       puts "Error retrieving headers: #{e}"
+      exit 1
     end
 
     begin
       DateTime.parse(headers['last-modified'])
-    rescue DateTime::Error => e
-      puts "Could not parse date string"
+    rescue DateTime::Error, TypeError => e
+      puts 'Could not parse date string. Probably an error downloading the maxmind db.' \
+        "\nHeaders: #{headers}"
+      exit 1
     end
   end
 
