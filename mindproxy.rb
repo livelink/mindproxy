@@ -5,8 +5,8 @@ require_relative 'lib/mmhaacl'
 
 begin
   opts = Slop.parse do |o|
-    o.string '-c', '--citycsv', 'The maxmind city database csv', default: '/tmp/maxmind_db/GeoLite2-City-Locations-en.csv'
-    o.string '-i', '--ipblockscsv', 'The maxmind ip blocks database csv', default: '/tmp/maxmind_db/GeoLite2-City-Blocks-IPv4.csv'
+    o.string '-c', '--citycsv', 'The maxmind city database csv', default: ''
+    o.string '-i', '--ipblockscsv', 'The maxmind ip blocks database csv', default: ''
     o.array '-a', '--countryiso', 'The optional country code (ISO).', default: [], delimiter: ','
     o.array '-n', '--countryname', 'The optional country name', default: [], delimiter: ','
     o.array '-s', '--subdivision', 'A subdivision of a country. Eg Crimea', default: [], delimiter: ','

@@ -13,8 +13,8 @@ class ConfigGen
     @countryiso = countryiso
     @countryname = countryname
     @subdivision = subdivision
-    @ipblockscsv = ipblockscsv
-    @citycsv = citycsv
+    @ipblockscsv = ipblockscsv.empty? ? "#{dir}/GeoLite2-City-Blocks-IPv4.csv" : ipblockscsv
+    @citycsv = citycsv.empty? ? "#{dir}/GeoLite2-City-Locations-en.csv" : citycsv
     @geoname_ids = []
     @ip_blocks = []
     @outputfile = outputfile
