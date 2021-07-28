@@ -82,6 +82,7 @@ haproxy.  Here is one example which will deny access to any source ip that is in
 the list.
 
 ```
+# Haproxy config file
 acl block_these src -f /tmp/mindproxy_acl.lst
 http-request deny if block_these
 ```
