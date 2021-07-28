@@ -55,9 +55,10 @@ The string must exactly match the respective entry in the CSV
 -c /tmp/GeoLite2-City-CSV_20210713/GeoLite2-City-Locations-en.csv \
 -i /tmp/GeoLite2-City-CSV_20210713/GeoLite2-City-Blocks-IPv4.csv \
 -a KP -n Cuba -s Crimea -o test.conf -l <A VALID MAXMIND KEY>
-
+```
+```
 #Download the latest db csv files and with the same filters as above, but use
-specify the license using the MAXMIND_LICENSE_KEY environment variable
+#the license specified by the MAXMIND_LICENSE_KEY environment variable
 
 MAXMIND_LICENSE_KEY=<A VALID MAXMIND KEY> ./mindproxy.rb -a KP -n Cuba \
 -s Crimea -o test.conf
