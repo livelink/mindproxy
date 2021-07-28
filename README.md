@@ -41,14 +41,11 @@ Any of country name, country iso and country subdivision will be combined
 as a logical OR to filter the results found in the CSV file specified by -f.
 The string must exactly match the respective entry in the CSV
 
-## The code flow
+## Program Flow
 
 ![Flow](mindproxy_flow.svg)
 
-## Example
-
-A prerequisite is that the maxmind database csv file are downloaded in advance.
-Grab them from [maxmind.com](https://www.maxmind.com/)
+## Examples
 
 ```
 #Filter North Korea(KP), Cuba, and Crimea
