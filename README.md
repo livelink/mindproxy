@@ -1,8 +1,9 @@
 ![Build Status](https://github.com/livelink/mindproxy/actions/workflows/main.yml/badge.svg)
 # mindproxy
 
-A ruby script that parses the maxmind csv database files to produce a haproxy
-compatible acl config file.
+A ruby script that filters the maxmind csv database files based on country or
+subdivisions of countries. The output is a text file list of IPv4 blocks that
+can be used as a to load into a haproxy acl.
 
 ## Installation
 
@@ -74,6 +75,16 @@ head test.conf
 31.40.128.70/32
 ```
 
+## Haproxy config
+
+Once the file containing the IP blocks has been written this can be read by
+haproxy.  Here is one example which will deny access to any source ip that is in
+the list.
+
+```
+acl block_these src -f /tmp/mindproxy_acl.lst
+http-request deny if block_these
+```
 
 ## Tests
 
