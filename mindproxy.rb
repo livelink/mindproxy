@@ -8,11 +8,11 @@ begin
     o.string '-c', '--citycsv', 'The maxmind city database csv', default: ''
     o.string '-i', '--ipblockscsv', 'The maxmind ip blocks database csv', default: ''
     o.array '-a', '--countryiso', 'The optional country code (ISO).', default: [], delimiter: ','
-    o.array '-n', '--countryname', 'The optional country name', default: [], delimiter: ','
-    o.array '-s', '--subdivision', 'A subdivision of a country. Eg Crimea', default: [], delimiter: ','
-    o.string '-o', '--outputfile', 'The ouptut haproxy config file', default: '/tmp/mindproxy_acl.config'
+    o.array '-n', '--countryname', 'The optional country name. Has to match name in csv', default: [], delimiter: ','
+    o.array '-s', '--subdivision', 'A subdivision of a country. Has to match name in csv. Eg Crimea', default: [], delimiter: ','
+    o.string '-o', '--outputfile', 'The ouptut haproxy config file', default: '/tmp/mindproxy_acl.lst'
     o.string '-l', '--license', 'A maxmind license key', default: ENV['MAXMIND_LICENSE_KEY']
-    o.string '-d', '--dir', 'The directory to download to', default: '/tmp/maxmind_db'
+    o.string '-d', '--dir', 'The directory to download the maxmind db to', default: '/tmp/maxmind_db'
     o.on '-h', '--help', 'Prints help message' do
       puts o
       exit
