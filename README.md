@@ -23,23 +23,23 @@ See usage for the cli options
 ## Usage
 
 ```
-./mindproxy.rb -h
+./mindproxy.rb
 usage: ./mindproxy.rb [options]
     -c, --citycsv      The maxmind city database csv
     -i, --ipblockscsv  The maxmind ip blocks database csv
-    -a, --countryiso   The optional country code (ISO).
-    -n, --countryname  The optional country name
-    -s, --subdivision  A subdivision of a country. Eg Crimea
-    -o, --outputfile   The ouptut haproxy config file
+    -a, --countryiso   The optional country code (ISO).Has to match code in csv
+    -n, --countryname  The optional country name. Has to match name in csv
+    -s, --subdivision  A subdivision of a country. Has to match name in csv. Eg Crimea
+    -o, --outputfile   The ouptut file
     -l, --license      A maxmind license key
-    -d, --dir          The directory to download to
+    -d, --dir          The directory to download the maxmind db to
+    -f, --force        Force analysis even if database is up-to-date
     -h, --help         Prints help message
-
 ```
 
 
 Any of country name, country iso and country subdivision will be combined
-as a logical OR to filter the results found in the CSV file specified by -f.
+as a logical OR to filter the results found in the CSV file specified by `-o`.
 The string must exactly match the respective entry in the CSV
 
 ## Program Flow
