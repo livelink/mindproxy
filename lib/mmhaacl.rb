@@ -52,10 +52,13 @@ class ConfigGen
     end
   end
 
-  def write_config
+  def analyse_db
     puts 'Analysing maxmind database csv files'
     get_geoname_ids
     get_ip_blocks
+  end
+
+  def write_config
     puts "Writing haproxy acl file to #{@outputfile}"
     begin
       FileUtils.mkdir_p(File.dirname(@outputfile))
