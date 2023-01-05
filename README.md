@@ -3,7 +3,7 @@
 
 A ruby script that filters the maxmind csv database files based on country or
 subdivisions of countries. The output is a text file list of IPv4 blocks that
-can be used as to load into a haproxy acl.
+can be used to load into a haproxy acl.
 
 ## Installation
 
