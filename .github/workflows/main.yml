@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run rspec
         run: |
-          sudo gem install bundler
+          sudo gem install bundler -v 2.1.4
           bundle install
           rspec
   build_image:

@@ -42,7 +42,7 @@ PLATFORMS
 DEPENDENCIES
   httparty
   rspec
-  rubyzip
+  rubyzip (~> 2.3.0)
   slop
   webmock
 
